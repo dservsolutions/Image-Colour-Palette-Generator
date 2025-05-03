@@ -1,8 +1,9 @@
 import os
 import colorgram
+import webcolors
 from PIL import Image
-from flask import Flask, request, render_template
-from werkzeug.utils import secure_filename
+from flask import Flask, request, render_template, url_for, redirect
+from werkzeug.utils import secure_filename, redirect
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -26,7 +27,11 @@ def upload_file():
             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(path)
             print(f"Saved to {path}")
-            proper = get_image_properties(path)
+            top10 = get_image_properties(path)
+            if top10:
+                color_name = webcolors.rgb_to_name(top10)
+                print(color_name)
+
     return render_template('index.html', filename=filename)
 
 # After processing the image, tells to the user what are the top 10 most common colors.
@@ -44,12 +49,10 @@ def get_image_properties(image_path, num_colors=10):
         for color in colors:
             # color.rgb is a named tuple with r, g, b attributes
             rgb_tuple = (color.rgb.r, color.rgb.g, color.rgb.b)
+            # top_colors.append(rgb_tuple)
             top_colors.append(rgb_tuple)
-            print(top_colors)
             return top_colors
-        print(properties.values())
         return properties
-
     except FileNotFoundError:
         print(f"Error: Image not found at {image_path}")
         return None
