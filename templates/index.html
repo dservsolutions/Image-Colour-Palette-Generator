@@ -25,9 +25,10 @@
 
     {% if filename %}
     <div class="preview-container">
-        <h3>Uploaded Image:</h3>
+        <h3>Uploaded Image</h3>
         <img src="{{ url_for('static', filename='uploads/' ~ filename) }}" alt="Uploaded Image">
     </div>
     {% endif %}
+
 </body>
 </html>
