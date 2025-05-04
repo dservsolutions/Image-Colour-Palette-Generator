@@ -30,6 +30,22 @@
         <p>{{ color }}</p>
     </div>
     {% endif %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Color</th>
+      <th scope="col">Color Code</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for color in top_rgb %}
+    <tr>
+      <th scope="row">{{ color['rgb'] }}</th>
+      <td>{{ color['name'] }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 
 </body>
 </html>
