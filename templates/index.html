@@ -1,51 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Upload Image</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Color Extractor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <style>
+        body {
+            padding: 20px;
+        }
+        .upload-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
         .preview-container {
             margin-top: 20px;
-            border: 2px solid #ccc;
-            padding: 10px;
-            max-width: 400px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .preview-container h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
         }
         .preview-container img {
             width: 100%;
+            max-width: 400px;
             height: auto;
+            border: 1px solid #eee;
+            border-radius: 3px;
+        }
+        .color-palette {
+            margin-top: 20px;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .color-info {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h1>Upload an Image</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
+    <div class="container">
+        <section class="upload-section">
+            <h1>Extract Colors from an Image</h1>
+            <p class="lead">Upload an image to see its dominant colors.</p>
+            <form method="POST" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6">
+                    <label for="image" class="form-label">Choose an image:</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Analyze Image</button>
+                </div>
+            </form>
+        </section>
 
-    {% if filename %}
-    <div class="preview-container">
-        <h3>Uploaded Image</h3>
-        <img src="{{ url_for('static', filename='uploads/' ~ filename) }}" alt="Uploaded Image">
-        <p>{{ color }}</p>
+        {% if filename %}
+        <section class="preview-container">
+            <h3>Uploaded Image</h3>
+            <img src="{{ url_for('static', filename='uploads/' ~ filename) }}" alt="Uploaded Image">
+        </section>
+
+        {% if top_rgb %}
+        <section class="color-palette">
+            <h3>Dominant Colors</h3>
+            <div class="d-flex flex-wrap gap-2">
+                {% for color in top_rgb %}
+                <div class="text-center">
+                    <div class="color-swatch" style="background-color: rgb({{ color['rgb'][0] }}, {{ color['rgb'][1] }}, {{ color['rgb'][2] }});"></div>
+                    <p class="color-info">RGB: {{ color['rgb'] }}</p>
+                    <p class="color-info">Name: {{ color['name'] }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% endif %}
     </div>
-    {% endif %}
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Color</th>
-      <th scope="col">Color Code</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for color in top_rgb %}
-    <tr>
-      <th scope="row">{{ color['rgb'] }}</th>
-      <td>{{ color['name'] }}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -26,7 +26,6 @@ def upload_file():
             filename = secure_filename(file.filename)
             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(path)
-            print(f"Saved to {path}")
             colors = get_image_colors(path)
             for color in colors:
                 colors_data.append(color)
