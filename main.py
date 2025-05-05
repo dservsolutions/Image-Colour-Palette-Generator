@@ -1,9 +1,8 @@
 import os
 import colorgram
 import webcolors
-from PIL import Image
-from flask import Flask, request, render_template, url_for, redirect
-from werkzeug.utils import secure_filename, redirect
+from flask import Flask, request, render_template
+from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -31,7 +30,6 @@ def upload_file():
             colors = get_image_colors(path)
             for color in colors:
                 colors_data.append(color)
-                print(colors_data)
             return render_template('index.html', filename=filename, top_rgb=colors_data)
     return render_template('index.html', filename=filename)
 
